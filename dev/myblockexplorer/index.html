@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <title>my block Explorer</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    
+</head>
+<body>
+  <button onclick="submitValue()">Get blockchain</button>
+  <br>
+
+  <input type="text" id="txttransactionid"/>
+  <button onclick="search_transaction()">Get transaction</button>
+
+  <p id="demo"></p>
+  <!-- <p id="demo2"></p> -->
+
+  <table id="demo3" border="1"></table>
+  <table id="demo4" border="1"></table>
+  <table id="demo5" border="1"></table>
+
+  <br>
+  <br>
+  sender address <input type="text" id="txtsenderaddress" />
+  <button onclick="submit_address()">submit address</button>
+
+  <br>
+  <br>
+
+  sender <input type="text" id="txtsender"/>
+  <br>
+  <br>
+  recipient <input type="text" id="txtrecipient"/>
+  <br>
+  <br>
+  amount <input type="text" id="txtamount"/>
+  <br>
+  <br>
+
+  <button onclick="submit_transaction()">submit</button>
+
+
+
+
+
+</body>
+<script>
+   function submitValue(){
+
+
+	var url = "http://localhost:3001/blockchain";
+
+	var returnVal = null;
+	$.get(url, function(data,status){
+	  var myObj = $.parseJSON(JSON.stringify(data));
+	  // alert(myObj);
+    var output = "";
+
+    for(x in myObj){
+      if(x!="chain"){
+        document.getElementById("demo").innerHTML = myObj.currentNodeUrl;
+
+
+      }else{
+        for (block in myObj.chain) {
+          output+="<tr>"+"<td>"+myObj.chain[block].index+"</td>"+"<td>"+myObj.chain[block].nonce+"</td>";
+          output+="</tr>";
+          document.getElementById("demo3").innerHTML = output;
+        }
+      }
+    }
+
+  });
+
+}
+
+function search_transaction() {
+
+  var transactionId= document.getElementById("txttransactionid").value;
+  // request transaction id
+  var url="http://localhost:3001/transaction/"+transactionId;
+  var output2 = "";
+
+  $.get(url, function(data,status){
+  var myObj2 = $.parseJSON(JSON.stringify(data));
+  if (myObj2.transaction) {
+  output2+="<tr><td>"+myObj2.transaction.amount+"</td><td>"+myObj2.transaction.sender+"</td><td>"+myObj2.transaction.recipient+"</tr>";
+  document.getElementById("demo4").innerHTML = output2;
+
+  }
+  
+  });
+};
+
+function submit_transaction(){
+  var sender= document.getElementById("txtsender").value;
+  var recipient = document.getElementById("txtrecipient").value;
+  var amount = + document.getElementById("txtamount").value;
+
+  var url= "http://localhost:3001/transaction/broadcast";
+  var url1 = "http://localhost:3001/mine";
+
+  const json = {
+  "amount": amount,
+  "sender": sender,
+  "recipient": recipient
+  };
+
+  fetch(url, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(json),
+});
+  
+  //mine block
+  // fetch(url1);
+};
+
+
+//todo
+function submit_address(){
+  var sender= document.getElementById("txtsenderaddress");
+  url= "http://localhost:3001/address/"+sender;
+  output="";
+  $.get(url, function (data,status) {
+    var myObj2 = $.parseJSON(JSON.stringify(data));
+    if (myObj2.AddressData) {
+      console.log("yes");
+      
+      console.log(myObj2.AddressData.addressTransactions[0].amount);
+      // for (Transaction in myObj2.AddressData.addressTransactions) {
+      //   output += "<tr><td>" + myObj2.AddressData.addressTransactions[Transaction].amount + "</td><td>" + myObj2.AddressData.addressTransactions[Transaction].sender + "</td><td>" + myObj2.AddressData.addressTransactions[Transaction].recipient + "</td><td>" + myObj2.AddressData.addressTransactions[Transaction].transactionId + "</td></tr>";
+      // };
+      // output += "<tr>" + myObj2.AddressData.addBalance + "</tr>";
+    }
+    
+      
+        
+
+    
+  document.getElementById("demo5").innerHTML = output;
+
+  });
+}
+
+</script>
+</html>

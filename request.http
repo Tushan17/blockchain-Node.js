@@ -1,0 +1,50 @@
+# POST http://localhost:3001/register-and-broadcast-node
+# Content-Type: application/json
+
+# {
+#     "newNodeUrl":"http://localhost:3004"
+# }
+
+# localhost  3001/mine
+
+# POST http://localhost:3002/transaction/broadcast
+# Content-Type: application/json
+
+# {
+#     "amount":5030,
+#     "sender":"ex",
+#     "recipient":"dan"
+# }
+
+# POST http://localhost:3001/transaction/broadcast
+# Content-Type: application/json
+
+# {
+#     "amount":7000,
+#     "sender":"JENSFNFNESSOFMSOFSOFNSONSG",
+#     "recipient":"GRGSFSESSOFMSOFSOFNSONSG"
+# }
+# http://localhost:3001/mine
+# # JENSFNFNESSOFMSOFSOFNSONSG
+
+# http://localhost:3001/address/76e62ee0b87311ed8d3ca95d441b6426
+# GET http://localhost:8080/assignment2/index.php?token=tushan&author=sandy taylor
+
+
+
+
+#php
+# POST http://localhost:8080/webcuptesting/phpblockchain/tests/simplechain.php
+# Content-Type: application/json
+# {
+#    "data":"lol"
+# }
+
+
+POST http://localhost:8080/webcuptesting/phpblockchain/tests/simplechain.php
+Content-Type: application/json
+{
+   "index": 3,
+   "timestamp": "1483225200",
+   "data":"lol"
+}
